@@ -205,6 +205,10 @@ footer{
 
 <input id="customerPhone" placeholder="رقم الجوال">
 
+<input id="customerIdNumber" placeholder="رقم الهوية">
+
+<input id="customerAddress" placeholder="الموقع / العنوان">
+
 <input id="customerEmail" placeholder="البريد الإلكتروني">
 
 <textarea id="customerNotes" placeholder="ملاحظات"></textarea>
@@ -252,6 +256,12 @@ async function saveCustomer(){
     const phone =
         document.getElementById("customerPhone").value.trim();
 
+    const idNumber =
+        document.getElementById("customerIdNumber").value.trim();
+
+    const address =
+        document.getElementById("customerAddress").value.trim();
+
     const email =
         document.getElementById("customerEmail").value.trim();
 
@@ -271,6 +281,8 @@ async function saveCustomer(){
             {
                 name:name,
                 phone:phone,
+                id_number:idNumber,
+                address:address,
                 email:email,
                 notes:notes
             }
@@ -288,6 +300,8 @@ async function saveCustomer(){
 
     document.getElementById("customerName").value="";
     document.getElementById("customerPhone").value="";
+    document.getElementById("customerIdNumber").value="";
+    document.getElementById("customerAddress").value="";
     document.getElementById("customerEmail").value="";
     document.getElementById("customerNotes").value="";
 
@@ -299,7 +313,7 @@ async function loadCustomers(){
     const { data, error } =
         await supabaseClient
         .from("customers")
-        .select("id,name,phone,email,notes");
+        .select("id,name,phone,id_number,address,email,notes");
 
     if(error){
 
@@ -321,6 +335,8 @@ async function loadCustomers(){
         <div class="customer">
             <strong>${customer.name || ""}</strong><br>
             📱 ${customer.phone || ""}<br>
+            🪪 ${customer.id_number || ""}<br>
+            📍 ${customer.address || ""}<br>
             ✉️ ${customer.email || ""}<br>
             📝 ${customer.notes || ""}
         </div>
