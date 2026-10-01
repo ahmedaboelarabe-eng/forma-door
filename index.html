@@ -6,140 +6,145 @@
 <title>ELARBE - Forma Door</title>
 
 <style>
-* {
-    box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+    color:#222;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-    color: #222;
+header{
+    background:#171717;
+    color:white;
+    padding:20px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-header {
-    background: #171717;
-    color: white;
-    padding: 20px 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.logo{
+    font-size:28px;
+    font-weight:bold;
+    letter-spacing:2px;
 }
 
-.logo {
-    font-size: 28px;
-    font-weight: bold;
-    letter-spacing: 2px;
+.brand{
+    color:#c49a6c;
 }
 
-.brand {
-    color: #c49a6c;
-    font-size: 15px;
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:25px;
 }
 
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 25px;
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-top:25px;
 }
 
-h1 {
-    margin: 0;
-    font-size: 30px;
+.card{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 3px 12px #00000012;
 }
 
-.subtitle {
-    color: #777;
-    margin-top: 8px;
+.card-title{
+    color:#777;
+    margin-bottom:10px;
 }
 
-.cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    margin-top: 25px;
+.number{
+    font-size:28px;
+    font-weight:bold;
+    color:#8b5e3c;
 }
 
-.card {
-    background: white;
-    padding: 22px;
-    border-radius: 15px;
-    box-shadow: 0 3px 12px rgba(0,0,0,.08);
+.menu{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-top:25px;
 }
 
-.card-title {
-    color: #777;
-    margin-bottom: 12px;
+.button{
+    background:white;
+    border:0;
+    padding:25px;
+    border-radius:15px;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:0 3px 12px #00000012;
 }
 
-.number {
-    font-size: 30px;
-    font-weight: bold;
-    color: #8b5e3c;
+.button:hover{
+    background:#8b5e3c;
+    color:white;
 }
 
-.menu {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-top: 25px;
+#customers{
+    display:none;
+    background:white;
+    margin-top:25px;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 3px 12px #00000012;
 }
 
-.button {
-    border: none;
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    font-size: 18px;
-    cursor: pointer;
-    box-shadow: 0 3px 12px rgba(0,0,0,.08);
+input,textarea{
+    width:100%;
+    padding:13px;
+    margin:7px 0;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:16px;
 }
 
-.button:hover {
-    background: #8b5e3c;
-    color: white;
+textarea{
+    height:90px;
+    resize:none;
 }
 
-#customers {
-    display: none;
-    background: white;
-    margin-top: 25px;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 3px 12px rgba(0,0,0,.08);
+.save{
+    background:#8b5e3c;
+    color:white;
+    border:0;
+    padding:13px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
 }
 
-input {
-    width: 100%;
-    padding: 13px;
-    margin: 8px 0;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+#customerList{
+    margin-top:25px;
 }
 
-.save {
-    background: #8b5e3c;
-    color: white;
-    border: none;
-    padding: 13px 25px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 10px;
+.customer{
+    border:1px solid #eee;
+    padding:15px;
+    border-radius:10px;
+    margin-top:10px;
+    background:#fafafa;
 }
 
-footer {
-    text-align: center;
-    color: #888;
-    padding: 35px;
+footer{
+    text-align:center;
+    color:#888;
+    padding:35px;
 }
 
-@media (max-width: 700px) {
-    .cards {
-        grid-template-columns: repeat(2, 1fr);
+@media(max-width:700px){
+    .cards{
+        grid-template-columns:repeat(2,1fr);
     }
 
-    .menu {
-        grid-template-columns: 1fr;
+    .menu{
+        grid-template-columns:1fr;
     }
 }
 </style>
@@ -154,83 +159,66 @@ footer {
 
 <div class="container">
 
-    <h1>لوحة التحكم</h1>
-    <div class="subtitle">نظام إدارة معرض فورما دور</div>
+<h1>لوحة التحكم</h1>
+<p>نظام إدارة معرض فورما دور</p>
 
-    <div class="cards">
+<div class="cards">
 
-        <div class="card">
-            <div class="card-title">العملاء</div>
-            <div class="number">0</div>
-        </div>
+<div class="card">
+<div class="card-title">العملاء</div>
+<div class="number" id="customerCount">0</div>
+</div>
 
-        <div class="card">
-            <div class="card-title">الطلبات</div>
-            <div class="number">0</div>
-        </div>
+<div class="card">
+<div class="card-title">الطلبات</div>
+<div class="number">0</div>
+</div>
 
-        <div class="card">
-            <div class="card-title">الفواتير</div>
-            <div class="number">0</div>
-        </div>
+<div class="card">
+<div class="card-title">الفواتير</div>
+<div class="number">0</div>
+</div>
 
-        <div class="card">
-            <div class="card-title">المدفوعات</div>
-            <div class="number">0 ريال</div>
-        </div>
+<div class="card">
+<div class="card-title">المدفوعات</div>
+<div class="number">0 ريال</div>
+</div>
 
-    </div>
+</div>
 
-    <div class="menu">
+<div class="menu">
 
-        <button class="button" onclick="showCustomers()">
-            👤 العملاء
-        </button>
+<button class="button" onclick="showCustomers()">👤 العملاء</button>
+<button class="button">📦 الطلبات</button>
+<button class="button">🧾 الفواتير</button>
+<button class="button">💰 المدفوعات</button>
+<button class="button">🏭 المصنع</button>
+<button class="button">⚙️ الإعدادات</button>
 
-        <button class="button">
-            📦 الطلبات
-        </button>
+</div>
 
-        <button class="button">
-            🧾 الفواتير
-        </button>
+<div id="customers">
 
-        <button class="button">
-            💰 المدفوعات
-        </button>
+<h2>إضافة عميل جديد</h2>
 
-        <button class="button">
-            🏭 المصنع
-        </button>
+<input id="customerName" placeholder="اسم العميل">
 
-        <button class="button">
-            ⚙️ الإعدادات
-        </button>
+<input id="customerPhone" placeholder="رقم الجوال">
 
-    </div>
+<input id="customerEmail" placeholder="البريد الإلكتروني">
 
-    <div id="customers">
+<textarea id="customerNotes" placeholder="ملاحظات"></textarea>
 
-        <h2>إضافة عميل جديد</h2>
+<button class="save" onclick="saveCustomer()">حفظ العميل</button>
 
-        <input id="customerName" type="text" placeholder="اسم العميل">
+<div id="customerList"></div>
 
-        <input id="customerPhone" type="text" placeholder="رقم الجوال">
-
-        <input id="customerAddress" type="text" placeholder="العنوان">
-
-        <input id="customerId" type="text" placeholder="رقم الهوية">
-
-        <button class="save" onclick="saveCustomer()">
-            حفظ العميل
-        </button>
-
-    </div>
+</div>
 
 </div>
 
 <footer>
-    ELARBE © 2026 - Forma Door
+ELARBE © 2026 - Forma Door
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -249,52 +237,96 @@ window.supabase.createClient(
     SUPABASE_KEY
 );
 
-function showCustomers() {
+function showCustomers(){
+
     document.getElementById("customers").style.display = "block";
+
+    loadCustomers();
 }
 
-async function saveCustomer() {
+async function saveCustomer(){
 
     const name =
-        document.getElementById("customerName").value;
+        document.getElementById("customerName").value.trim();
 
     const phone =
-        document.getElementById("customerPhone").value;
+        document.getElementById("customerPhone").value.trim();
 
-    const address =
-        document.getElementById("customerAddress").value;
+    const email =
+        document.getElementById("customerEmail").value.trim();
 
-    const idNumber =
-        document.getElementById("customerId").value;
+    const notes =
+        document.getElementById("customerNotes").value.trim();
 
-    if (!name) {
+    if(!name){
+
         alert("اكتب اسم العميل أولاً");
         return;
     }
 
-    const { error } = await supabaseClient
+    const { data, error } =
+        await supabaseClient
         .from("customers")
         .insert([
             {
-                name: name,
-                phone: phone,
-                address: address,
-                id_number: idNumber
+                name:name,
+                phone:phone,
+                email:email,
+                notes:notes
             }
-        ]);
+        ])
+        .select();
 
-    if (error) {
-        alert("حدث خطأ أثناء حفظ العميل");
+    if(error){
+
+        alert("حدث خطأ: " + error.message);
         console.error(error);
         return;
     }
 
     alert("تم حفظ العميل بنجاح");
 
-    document.getElementById("customerName").value = "";
-    document.getElementById("customerPhone").value = "";
-    document.getElementById("customerAddress").value = "";
-    document.getElementById("customerId").value = "";
+    document.getElementById("customerName").value="";
+    document.getElementById("customerPhone").value="";
+    document.getElementById("customerEmail").value="";
+    document.getElementById("customerNotes").value="";
+
+    loadCustomers();
+}
+
+async function loadCustomers(){
+
+    const { data, error } =
+        await supabaseClient
+        .from("customers")
+        .select("id,name,phone,email,notes");
+
+    if(error){
+
+        console.error(error);
+        return;
+    }
+
+    document.getElementById("customerCount").textContent =
+        data.length;
+
+    const list =
+        document.getElementById("customerList");
+
+    list.innerHTML = "<h3>العملاء</h3>";
+
+    data.forEach(customer => {
+
+        list.innerHTML += `
+        <div class="customer">
+            <strong>${customer.name || ""}</strong><br>
+            📱 ${customer.phone || ""}<br>
+            ✉️ ${customer.email || ""}<br>
+            📝 ${customer.notes || ""}
+        </div>
+        `;
+
+    });
 }
 
 </script>
