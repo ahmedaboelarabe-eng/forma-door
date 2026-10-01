@@ -175,5 +175,18 @@ function showCustomers(){
     alert("صفحة العملاء - هنربطها بقاعدة البيانات في الخطوة التالية");
 }
 </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://hbjtldjytbhfyttltnur.supabase.co";
+const SUPABASE_KEY = "sb_publishable_z0evRtHQkpx1NVoWjvJ9wg_jkqnEqjX";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+console.log("Atlas connected to Supabase");
+</script>
 </body>
 </html>
