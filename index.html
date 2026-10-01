@@ -32,10 +32,11 @@ header{
 
 .brand{
     color:#c49a6c;
+    font-weight:bold;
 }
 
 .container{
-    max-width:1100px;
+    max-width:1200px;
     margin:auto;
     padding:25px;
 }
@@ -75,7 +76,7 @@ header{
 .button{
     background:white;
     border:0;
-    padding:25px;
+    padding:22px;
     border-radius:15px;
     font-size:18px;
     cursor:pointer;
@@ -87,7 +88,7 @@ header{
     color:white;
 }
 
-#customers{
+.panel{
     display:none;
     background:white;
     margin-top:25px;
@@ -96,13 +97,18 @@ header{
     box-shadow:0 3px 12px #00000012;
 }
 
-input,textarea{
+.panel.active{
+    display:block;
+}
+
+input,textarea,select{
     width:100%;
     padding:13px;
     margin:7px 0;
     border:1px solid #ddd;
     border-radius:8px;
     font-size:16px;
+    background:white;
 }
 
 textarea{
@@ -118,18 +124,51 @@ textarea{
     border-radius:8px;
     cursor:pointer;
     font-size:16px;
+    margin-top:8px;
 }
 
-#customerList{
-    margin-top:25px;
+.save:hover{
+    opacity:.9;
 }
 
-.customer{
+.refresh{
+    background:#171717;
+    color:white;
+    border:0;
+    padding:11px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    margin-bottom:15px;
+}
+
+.section-title{
+    border-bottom:1px solid #eee;
+    padding-bottom:12px;
+    margin-bottom:15px;
+}
+
+.item{
     border:1px solid #eee;
-    padding:15px;
+    padding:16px;
     border-radius:10px;
     margin-top:10px;
     background:#fafafa;
+    line-height:1.8;
+}
+
+.item strong{
+    color:#8b5e3c;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.empty{
+    color:#888;
+    padding:15px 0;
 }
 
 footer{
@@ -145,6 +184,18 @@ footer{
 
     .menu{
         grid-template-columns:1fr;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    header{
+        padding:16px;
+    }
+
+    .container{
+        padding:15px;
     }
 }
 </style>
@@ -171,45 +222,44 @@ footer{
 
 <div class="card">
 <div class="card-title">الطلبات</div>
-<div class="number">0</div>
+<div class="number" id="orderCount">0</div>
 </div>
 
 <div class="card">
 <div class="card-title">الفواتير</div>
-<div class="number">0</div>
+<div class="number" id="invoiceCount">0</div>
 </div>
 
 <div class="card">
 <div class="card-title">المدفوعات</div>
-<div class="number">0 ريال</div>
+<div class="number" id="paymentTotal">0 ريال</div>
 </div>
 
 </div>
 
 <div class="menu">
 
-<button class="button" onclick="showCustomers()">👤 العملاء</button>
-<button class="button">📦 الطلبات</button>
-<button class="button">🧾 الفواتير</button>
-<button class="button">💰 المدفوعات</button>
-<button class="button">🏭 المصنع</button>
-<button class="button">⚙️ الإعدادات</button>
+<button class="button" onclick="showPanel('customers')">👤 العملاء</button>
+<button class="button" onclick="showPanel('orders')">📦 الطلبات</button>
+<button class="button" onclick="showPanel('invoices')">🧾 الفواتير</button>
+<button class="button" onclick="showPanel('payments')">💰 المدفوعات</button>
+<button class="button" onclick="showPanel('factory')">🏭 المصنع</button>
+<button class="button" onclick="showPanel('settings')">⚙️ الإعدادات</button>
 
 </div>
 
-<div id="customers">
 
-<h2>إضافة عميل جديد</h2>
+<!-- العملاء -->
+
+<div id="customers" class="panel">
+
+<h2 class="section-title">👤 العملاء</h2>
 
 <input id="customerName" placeholder="اسم العميل">
 
 <input id="customerPhone" placeholder="رقم الجوال">
 
 <input id="customerIdNumber" placeholder="رقم الهوية">
-
-<input id="customerAddress" placeholder="الموقع / العنوان">
-
-<input id="customerEmail" placeholder="البريد الإلكتروني">
 
 <textarea id="customerNotes" placeholder="ملاحظات"></textarea>
 
@@ -219,11 +269,216 @@ footer{
 
 </div>
 
+
+<!-- الطلبات -->
+
+<div id="orders" class="panel">
+
+<h2 class="section-title">📦 الطلبات</h2>
+
+<select id="orderCustomer">
+<option value="">اختر العميل</option>
+</select>
+
+<input id="orderNumber" placeholder="رقم الطلب">
+
+<input id="orderProduct" placeholder="نوع المنتج / الباب">
+
+<div class="grid">
+
+<input id="orderQuantity"
+type="number"
+value="1"
+min="1"
+placeholder="الكمية">
+
+<input id="orderPrice"
+type="number"
+value="0"
+min="0"
+placeholder="سعر الوحدة">
+
+</div>
+
+<div class="grid">
+
+<input id="orderDeposit"
+type="number"
+value="0"
+min="0"
+placeholder="العربون">
+
+<select id="orderStatus">
+
+<option value="new">جديد</option>
+<option value="processing">قيد التنفيذ</option>
+<option value="completed">مكتمل</option>
+<option value="cancelled">ملغي</option>
+
+</select>
+
+</div>
+
+<textarea id="orderNotes" placeholder="ملاحظات الطلب"></textarea>
+
+<button class="save" onclick="saveOrder()">حفظ الطلب</button>
+
+<div id="orderList"></div>
+
+</div>
+
+
+<!-- الفواتير -->
+
+<div id="invoices" class="panel">
+
+<h2 class="section-title">🧾 الفواتير</h2>
+
+<select id="invoiceOrder">
+<option value="">اختر الطلب</option>
+</select>
+
+<input id="invoiceNumber" placeholder="رقم الفاتورة - اتركه فارغًا للتوليد التلقائي">
+
+<div class="grid">
+
+<input id="invoiceTotal"
+type="number"
+value="0"
+min="0"
+placeholder="الإجمالي">
+
+<input id="invoiceDiscount"
+type="number"
+value="0"
+min="0"
+placeholder="الخصم">
+
+</div>
+
+<div class="grid">
+
+<input id="invoicePaid"
+type="number"
+value="0"
+min="0"
+placeholder="المدفوع">
+
+<select id="invoiceStatus">
+
+<option value="draft">مسودة</option>
+<option value="issued">صادرة</option>
+<option value="paid">مدفوعة</option>
+
+</select>
+
+</div>
+
+<textarea id="invoiceNotes" placeholder="ملاحظات الفاتورة"></textarea>
+
+<button class="save" onclick="saveInvoice()">حفظ الفاتورة</button>
+
+<div id="invoiceList"></div>
+
+</div>
+
+
+<!-- المدفوعات -->
+
+<div id="payments" class="panel">
+
+<h2 class="section-title">💰 المدفوعات</h2>
+
+<select id="paymentOrder">
+<option value="">اختر الطلب</option>
+</select>
+
+<input id="paymentAmount"
+type="number"
+min="0"
+placeholder="مبلغ الدفعة">
+
+<textarea id="paymentNotes" placeholder="ملاحظات"></textarea>
+
+<button class="save" onclick="savePayment()">تسجيل الدفعة</button>
+
+<div id="paymentList"></div>
+
+</div>
+
+
+<!-- المصنع -->
+
+<div id="factory" class="panel">
+
+<h2 class="section-title">🏭 المصنع</h2>
+
+<select id="factoryOrder">
+<option value="">اختر الطلب</option>
+</select>
+
+<div class="grid">
+
+<input id="factoryMeasurements"
+placeholder="المقاسات">
+
+<input id="factoryColor"
+placeholder="اللون">
+
+</div>
+
+<div class="grid">
+
+<input id="factoryModel"
+placeholder="الموديل">
+
+<input id="factoryAccessories"
+placeholder="الإكسسوارات">
+
+</div>
+
+<select id="factoryStatus">
+
+<option value="new">جديد</option>
+<option value="production">قيد التصنيع</option>
+<option value="ready">جاهز</option>
+<option value="delivered">تم التسليم</option>
+
+</select>
+
+<textarea id="factoryNotes" placeholder="ملاحظات المصنع"></textarea>
+
+<button class="save" onclick="saveFactory()">حفظ بيانات المصنع</button>
+
+<div id="factoryList"></div>
+
+</div>
+
+
+<!-- الإعدادات -->
+
+<div id="settings" class="panel">
+
+<h2 class="section-title">⚙️ الإعدادات</h2>
+
+<p><strong>اسم النظام:</strong> ELARBE</p>
+
+<p><strong>المعرض:</strong> FORMA DOOR</p>
+
+<p><strong>النشاط:</strong> أبواب داخلية وخارجية</p>
+
+<button class="refresh" onclick="refreshAll()">
+🔄 تحديث البيانات
+</button>
+
+</div>
+
 </div>
 
 <footer>
 ELARBE © 2026 - Forma Door
 </footer>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -237,63 +492,143 @@ const SUPABASE_KEY =
 
 const supabaseClient =
 window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
+SUPABASE_URL,
+SUPABASE_KEY
 );
 
-function showCustomers(){
 
-    document.getElementById("customers").style.display = "block";
+/* التنقل */
 
-    loadCustomers();
+function showPanel(id){
+
+    document.querySelectorAll(".panel")
+    .forEach(panel => {
+        panel.classList.remove("active");
+    });
+
+    document.getElementById(id)
+    .classList.add("active");
+
+    if(id === "customers"){
+        loadCustomers();
+    }
+
+    if(id === "orders"){
+        loadOrders();
+        loadCustomerOptions();
+    }
+
+    if(id === "invoices"){
+        loadInvoices();
+        loadOrderOptions();
+    }
+
+    if(id === "payments"){
+        loadPayments();
+        loadOrderOptions();
+    }
+
+    if(id === "factory"){
+        loadFactory();
+        loadOrderOptions();
+    }
 }
+
+
+/* لوحة التحكم */
+
+async function loadDashboard(){
+
+    const customers =
+        await supabaseClient
+        .from("customers")
+        .select("id",{count:"exact",head:true});
+
+    const orders =
+        await supabaseClient
+        .from("orders")
+        .select("id",{count:"exact",head:true});
+
+    const invoices =
+        await supabaseClient
+        .from("invoices")
+        .select("id",{count:"exact",head:true});
+
+    const payments =
+        await supabaseClient
+        .from("payments")
+        .select("amount");
+
+    document.getElementById("customerCount").textContent =
+        customers.count || 0;
+
+    document.getElementById("orderCount").textContent =
+        orders.count || 0;
+
+    document.getElementById("invoiceCount").textContent =
+        invoices.count || 0;
+
+    let total = 0;
+
+    if(payments.data){
+
+        payments.data.forEach(payment => {
+
+            total += Number(payment.amount || 0);
+
+        });
+
+    }
+
+    document.getElementById("paymentTotal").textContent =
+        total.toLocaleString("ar-SA") + " ريال";
+}
+
+
+/* العملاء */
 
 async function saveCustomer(){
 
     const name =
-        document.getElementById("customerName").value.trim();
+        document.getElementById("customerName")
+        .value.trim();
 
     const phone =
-        document.getElementById("customerPhone").value.trim();
+        document.getElementById("customerPhone")
+        .value.trim();
 
     const idNumber =
-        document.getElementById("customerIdNumber").value.trim();
-
-    const address =
-        document.getElementById("customerAddress").value.trim();
-
-    const email =
-        document.getElementById("customerEmail").value.trim();
+        document.getElementById("customerIdNumber")
+        .value.trim();
 
     const notes =
-        document.getElementById("customerNotes").value.trim();
+        document.getElementById("customerNotes")
+        .value.trim();
 
     if(!name){
 
         alert("اكتب اسم العميل أولاً");
         return;
+
     }
 
-    const { data, error } =
+    const {error} =
         await supabaseClient
         .from("customers")
-        .insert([
-            {
-                name:name,
-                phone:phone,
-                id_number:idNumber,
-                address:address,
-                email:email,
-                notes:notes
-            }
-        ])
-        .select();
+        .insert([{
+
+            name:name,
+            phone:phone,
+            id_number:idNumber,
+            notes:notes
+
+        }]);
 
     if(error){
 
         alert("حدث خطأ: " + error.message);
-        console.error(error);
         return;
+
     }
 
     alert("تم حفظ العميل بنجاح");
@@ -301,49 +636,1076 @@ async function saveCustomer(){
     document.getElementById("customerName").value="";
     document.getElementById("customerPhone").value="";
     document.getElementById("customerIdNumber").value="";
-    document.getElementById("customerAddress").value="";
-    document.getElementById("customerEmail").value="";
     document.getElementById("customerNotes").value="";
 
-    loadCustomers();
+    await loadCustomers();
+    await loadCustomerOptions();
+    await loadDashboard();
 }
+
 
 async function loadCustomers(){
 
-    const { data, error } =
+    const {data,error} =
         await supabaseClient
         .from("customers")
-        .select("id,name,phone,id_number,address,email,notes");
+        .select("id,name,phone,id_number,notes")
+        .order("id",{ascending:false});
 
     if(error){
 
         console.error(error);
         return;
-    }
 
-    document.getElementById("customerCount").textContent =
-        data.length;
+    }
 
     const list =
         document.getElementById("customerList");
 
-    list.innerHTML = "<h3>العملاء</h3>";
+    list.innerHTML="<h3>قائمة العملاء</h3>";
+
+    if(!data || data.length === 0){
+
+        list.innerHTML +=
+        '<div class="empty">لا يوجد عملاء حتى الآن.</div>';
+
+        return;
+
+    }
 
     data.forEach(customer => {
 
         list.innerHTML += `
-        <div class="customer">
-            <strong>${customer.name || ""}</strong><br>
-            📱 ${customer.phone || ""}<br>
-            🪪 ${customer.id_number || ""}<br>
-            📍 ${customer.address || ""}<br>
-            ✉️ ${customer.email || ""}<br>
-            📝 ${customer.notes || ""}
+
+        <div class="item">
+
+            <strong>
+            ${escapeHtml(customer.name || "")}
+            </strong>
+
+            <br>
+
+            📱 ${escapeHtml(customer.phone || "غير مسجل")}
+
+            <br>
+
+            🪪 ${escapeHtml(customer.id_number || "غير مسجل")}
+
+            <br>
+
+            📝 ${escapeHtml(customer.notes || "لا توجد ملاحظات")}
+
         </div>
+
         `;
 
     });
 }
+
+
+async function loadCustomerOptions(){
+
+    const {data,error} =
+        await supabaseClient
+        .from("customers")
+        .select("id,name")
+        .order("name");
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    const select =
+        document.getElementById("orderCustomer");
+
+    select.innerHTML =
+        '<option value="">اختر العميل</option>';
+
+    data.forEach(customer => {
+
+        select.innerHTML += `
+
+        <option value="${customer.id}">
+        ${escapeHtml(customer.name)}
+        </option>
+
+        `;
+
+    });
+}
+
+
+/* الطلبات */
+
+async function saveOrder(){
+
+    const customerId =
+        document.getElementById("orderCustomer").value;
+
+    let orderNumber =
+        document.getElementById("orderNumber")
+        .value.trim();
+
+    const product =
+        document.getElementById("orderProduct")
+        .value.trim();
+
+    const quantity =
+        Number(
+            document.getElementById("orderQuantity")
+            .value || 1
+        );
+
+    const price =
+        Number(
+            document.getElementById("orderPrice")
+            .value || 0
+        );
+
+    const deposit =
+        Number(
+            document.getElementById("orderDeposit")
+            .value || 0
+        );
+
+    const status =
+        document.getElementById("orderStatus")
+        .value;
+
+    const notes =
+        document.getElementById("orderNotes")
+        .value.trim();
+
+    if(!customerId){
+
+        alert("اختر العميل");
+        return;
+
+    }
+
+    if(quantity <= 0){
+
+        alert("الكمية يجب أن تكون أكبر من صفر");
+        return;
+
+    }
+
+    if(!orderNumber){
+
+        orderNumber =
+        "ORD-" +
+        Date.now();
+
+    }
+
+    const total =
+        price * quantity;
+
+    const remaining =
+        Math.max(total - deposit,0);
+
+    const {error} =
+        await supabaseClient
+        .from("orders")
+        .insert([{
+
+            customer_id:customerId,
+            order_number:orderNumber,
+            status:status,
+            product:product,
+            quantity:quantity,
+            price:price,
+            deposit:deposit,
+            remaining:remaining,
+            notes:notes
+
+        }]);
+
+    if(error){
+
+        alert("حدث خطأ: " + error.message);
+        return;
+
+    }
+
+    alert("تم حفظ الطلب بنجاح");
+
+    document.getElementById("orderNumber").value="";
+    document.getElementById("orderProduct").value="";
+    document.getElementById("orderQuantity").value=1;
+    document.getElementById("orderPrice").value=0;
+    document.getElementById("orderDeposit").value=0;
+    document.getElementById("orderNotes").value="";
+
+    await loadOrders();
+    await loadOrderOptions();
+    await loadDashboard();
+}
+
+
+async function loadOrders(){
+
+    const {data,error} =
+        await supabaseClient
+        .from("orders")
+        .select(`
+
+            id,
+            customer_id,
+            order_number,
+            status,
+            product,
+            quantity,
+            price,
+            deposit,
+            remaining,
+            notes,
+            customers(name)
+
+        `)
+        .order("id",{ascending:false});
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    const list =
+        document.getElementById("orderList");
+
+    list.innerHTML="<h3>قائمة الطلبات</h3>";
+
+    if(!data || data.length === 0){
+
+        list.innerHTML +=
+        '<div class="empty">لا توجد طلبات حتى الآن.</div>';
+
+        return;
+
+    }
+
+    data.forEach(order => {
+
+        const total =
+            Number(order.price || 0) *
+            Number(order.quantity || 1);
+
+        list.innerHTML += `
+
+        <div class="item">
+
+            <strong>
+            طلب ${escapeHtml(order.order_number || order.id)}
+            </strong>
+
+            <br>
+
+            👤 العميل:
+            ${escapeHtml(order.customers?.name || "")}
+
+            <br>
+
+            🚪 المنتج:
+            ${escapeHtml(order.product || "")}
+
+            <br>
+
+            🔢 الكمية:
+            ${order.quantity || 0}
+
+            <br>
+
+            💵 الإجمالي:
+            ${total.toLocaleString("ar-SA")} ريال
+
+            <br>
+
+            💰 العربون:
+            ${Number(order.deposit || 0)
+            .toLocaleString("ar-SA")} ريال
+
+            <br>
+
+            📌 المتبقي:
+            ${Number(order.remaining || 0)
+            .toLocaleString("ar-SA")} ريال
+
+            <br>
+
+            📋 الحالة:
+            ${getStatusText(order.status)}
+
+            <br>
+
+            📝 ${escapeHtml(order.notes || "")}
+
+        </div>
+
+        `;
+
+    });
+}
+
+
+async function loadOrderOptions(){
+
+    const {data,error} =
+        await supabaseClient
+        .from("orders")
+        .select("id,order_number,product")
+        .order("id",{ascending:false});
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    const selects = [
+
+        "invoiceOrder",
+        "paymentOrder",
+        "factoryOrder"
+
+    ];
+
+    selects.forEach(id => {
+
+        const select =
+            document.getElementById(id);
+
+        select.innerHTML =
+        '<option value="">اختر الطلب</option>';
+
+        data.forEach(order => {
+
+            select.innerHTML += `
+
+            <option value="${order.id}">
+
+            ${escapeHtml(
+                order.order_number ||
+                ("طلب " + order.id)
+            )}
+
+            ${order.product
+            ? " - " + escapeHtml(order.product)
+            : ""}
+
+            </option>
+
+            `;
+
+        });
+
+    });
+}
+
+
+/* الفواتير */
+
+async function saveInvoice(){
+
+    const orderId =
+        document.getElementById("invoiceOrder").value;
+
+    let invoiceNumber =
+        document.getElementById("invoiceNumber")
+        .value.trim();
+
+    const total =
+        Number(
+            document.getElementById("invoiceTotal")
+            .value || 0
+        );
+
+    const discount =
+        Number(
+            document.getElementById("invoiceDiscount")
+            .value || 0
+        );
+
+    const paid =
+        Number(
+            document.getElementById("invoicePaid")
+            .value || 0
+        );
+
+    const status =
+        document.getElementById("invoiceStatus")
+        .value;
+
+    const notes =
+        document.getElementById("invoiceNotes")
+        .value.trim();
+
+    if(!orderId){
+
+        alert("اختر الطلب");
+        return;
+
+    }
+
+    if(!invoiceNumber){
+
+        invoiceNumber =
+        "INV-" +
+        Date.now();
+
+    }
+
+    const finalTotal =
+        Math.max(total - discount,0);
+
+    const remaining =
+        Math.max(finalTotal - paid,0);
+
+    const {error} =
+        await supabaseClient
+        .from("invoices")
+        .insert([{
+
+            order_id:orderId,
+            invoice_number:invoiceNumber,
+            status:status,
+            total:finalTotal,
+            discount:discount,
+            paid:paid,
+            remaining:remaining,
+            notes:notes
+
+        }]);
+
+    if(error){
+
+        alert("حدث خطأ: " + error.message);
+        return;
+
+    }
+
+    alert("تم حفظ الفاتورة بنجاح");
+
+    document.getElementById("invoiceNumber").value="";
+    document.getElementById("invoiceTotal").value=0;
+    document.getElementById("invoiceDiscount").value=0;
+    document.getElementById("invoicePaid").value=0;
+    document.getElementById("invoiceNotes").value="";
+
+    await loadInvoices();
+    await loadDashboard();
+}
+
+
+async function loadInvoices(){
+
+    const {data,error} =
+        await supabaseClient
+        .from("invoices")
+        .select(`
+
+            id,
+            invoice_number,
+            status,
+            total,
+            discount,
+            paid,
+            remaining,
+            issue_date,
+            due_date,
+            notes,
+            orders(order_number)
+
+        `)
+        .order("id",{ascending:false});
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    const list =
+        document.getElementById("invoiceList");
+
+    list.innerHTML="<h3>قائمة الفواتير</h3>";
+
+    if(!data || data.length === 0){
+
+        list.innerHTML +=
+        '<div class="empty">لا توجد فواتير حتى الآن.</div>';
+
+        return;
+
+    }
+
+    data.forEach(invoice => {
+
+        list.innerHTML += `
+
+        <div class="item">
+
+            <strong>
+            فاتورة
+            ${escapeHtml(
+                invoice.invoice_number ||
+                invoice.id
+            )}
+            </strong>
+
+            <br>
+
+            📦 الطلب:
+            ${escapeHtml(
+                invoice.orders?.order_number || ""
+            )}
+
+            <br>
+
+            💵 الإجمالي:
+            ${Number(invoice.total || 0)
+            .toLocaleString("ar-SA")} ريال
+
+            <br>
+
+            🎁 الخصم:
+            ${Number(invoice.discount || 0)
+            .toLocaleString("ar-SA")} ريال
+
+            <br>
+
+            💰 المدفوع:
+            ${Number(invoice.paid || 0)
+            .toLocaleString("ar-SA")} ريال
+
+            <br>
+
+            📌 المتبقي:
+            ${Number(invoice.remaining || 0)
+            .toLocaleString("ar-SA")} ريال
+
+            <br>
+
+            📋 الحالة:
+            ${getInvoiceStatus(invoice.status)}
+
+            <br>
+
+            📝 ${escapeHtml(invoice.notes || "")}
+
+        </div>
+
+        `;
+
+    });
+}
+
+
+/* المدفوعات */
+
+async function savePayment(){
+
+    const orderId =
+        document.getElementById("paymentOrder").value;
+
+    const amount =
+        Number(
+            document.getElementById("paymentAmount")
+            .value || 0
+        );
+
+    const notes =
+        document.getElementById("paymentNotes")
+        .value.trim();
+
+    if(!orderId){
+
+        alert("اختر الطلب");
+        return;
+
+    }
+
+    if(amount <= 0){
+
+        alert("اكتب مبلغ الدفعة");
+        return;
+
+    }
+
+    const {error} =
+        await supabaseClient
+        .from("payments")
+        .insert([{
+
+            order_id:orderId,
+            amount:amount,
+            notes:notes
+
+        }]);
+
+    if(error){
+
+        alert("حدث خطأ: " + error.message);
+        return;
+
+    }
+
+    /*
+      تحديث العربون والمتبقي في الطلب
+    */
+
+    const {data:order,error:orderError} =
+        await supabaseClient
+        .from("orders")
+        .select("id,price,quantity,deposit")
+        .eq("id",orderId)
+        .single();
+
+    if(!orderError && order){
+
+        const oldDeposit =
+            Number(order.deposit || 0);
+
+        const newDeposit =
+            oldDeposit + amount;
+
+        const total =
+            Number(order.price || 0) *
+            Number(order.quantity || 1);
+
+        const remaining =
+            Math.max(total - newDeposit,0);
+
+        await supabaseClient
+        .from("orders")
+        .update({
+
+            deposit:newDeposit,
+            remaining:remaining
+
+        })
+        .eq("id",orderId);
+
+    }
+
+    /*
+      تحديث الفاتورة المرتبطة بالطلب
+    */
+
+    const {data:invoice} =
+        await supabaseClient
+        .from("invoices")
+        .select("id,total,discount,paid")
+        .eq("order_id",orderId)
+        .order("id",{ascending:false})
+        .limit(1)
+        .maybeSingle();
+
+    if(invoice){
+
+        const newPaid =
+            Number(invoice.paid || 0) + amount;
+
+        const invoiceTotal =
+            Number(invoice.total || 0);
+
+        const invoiceRemaining =
+            Math.max(invoiceTotal - newPaid,0);
+
+        await supabaseClient
+        .from("invoices")
+        .update({
+
+            paid:newPaid,
+            remaining:invoiceRemaining,
+            status:
+                invoiceRemaining === 0
+                ? "paid"
+                : "issued"
+
+        })
+        .eq("id",invoice.id);
+
+    }
+
+    alert("تم تسجيل الدفعة بنجاح");
+
+    document.getElementById("paymentAmount").value="";
+    document.getElementById("paymentNotes").value="";
+
+    await loadPayments();
+    await loadOrders();
+    await loadInvoices();
+    await loadDashboard();
+}
+
+
+async function loadPayments(){
+
+    const {data,error} =
+        await supabaseClient
+        .from("payments")
+        .select(`
+
+            id,
+            amount,
+            payment_date,
+            notes,
+            orders(order_number)
+
+        `)
+        .order("id",{ascending:false});
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    const list =
+        document.getElementById("paymentList");
+
+    list.innerHTML="<h3>قائمة المدفوعات</h3>";
+
+    if(!data || data.length === 0){
+
+        list.innerHTML +=
+        '<div class="empty">لا توجد مدفوعات حتى الآن.</div>';
+
+        return;
+
+    }
+
+    data.forEach(payment => {
+
+        const date =
+            payment.payment_date
+            ? new Date(payment.payment_date)
+            .toLocaleDateString("ar-SA")
+            : "";
+
+        list.innerHTML += `
+
+        <div class="item">
+
+            <strong>
+            ${Number(payment.amount || 0)
+            .toLocaleString("ar-SA")} ريال
+            </strong>
+
+            <br>
+
+            📦 الطلب:
+            ${escapeHtml(
+                payment.orders?.order_number || ""
+            )}
+
+            <br>
+
+            📅 التاريخ:
+            ${date}
+
+            <br>
+
+            📝 ${escapeHtml(payment.notes || "")}
+
+        </div>
+
+        `;
+
+    });
+}
+
+
+/* المصنع */
+
+async function saveFactory(){
+
+    const orderId =
+        document.getElementById("factoryOrder").value;
+
+    const measurements =
+        document.getElementById("factoryMeasurements")
+        .value.trim();
+
+    const color =
+        document.getElementById("factoryColor")
+        .value.trim();
+
+    const model =
+        document.getElementById("factoryModel")
+        .value.trim();
+
+    const accessories =
+        document.getElementById("factoryAccessories")
+        .value.trim();
+
+    const status =
+        document.getElementById("factoryStatus")
+        .value;
+
+    const notes =
+        document.getElementById("factoryNotes")
+        .value.trim();
+
+    if(!orderId){
+
+        alert("اختر الطلب");
+        return;
+
+    }
+
+    const {error} =
+        await supabaseClient
+        .from("factory_orders")
+        .insert([{
+
+            order_id:orderId,
+            status:status,
+            measurements:measurements,
+            color:color,
+            model:model,
+            accessories:accessories,
+            notes:notes
+
+        }]);
+
+    if(error){
+
+        alert("حدث خطأ: " + error.message);
+        return;
+
+    }
+
+    alert("تم حفظ بيانات المصنع بنجاح");
+
+    document.getElementById("factoryMeasurements").value="";
+    document.getElementById("factoryColor").value="";
+    document.getElementById("factoryModel").value="";
+    document.getElementById("factoryAccessories").value="";
+    document.getElementById("factoryNotes").value="";
+
+    await loadFactory();
+}
+
+
+async function loadFactory(){
+
+    const {data,error} =
+        await supabaseClient
+        .from("factory_orders")
+        .select(`
+
+            id,
+            status,
+            measurements,
+            color,
+            model,
+            accessories,
+            notes,
+            created_at,
+            updated_at,
+            orders(order_number)
+
+        `)
+        .order("id",{ascending:false});
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    const list =
+        document.getElementById("factoryList");
+
+    list.innerHTML="<h3>طلبات المصنع</h3>";
+
+    if(!data || data.length === 0){
+
+        list.innerHTML +=
+        '<div class="empty">لا توجد طلبات مصنع حتى الآن.</div>';
+
+        return;
+
+    }
+
+    data.forEach(factory => {
+
+        list.innerHTML += `
+
+        <div class="item">
+
+            <strong>
+            طلب ${escapeHtml(
+                factory.orders?.order_number || ""
+            )}
+            </strong>
+
+            <br>
+
+            📏 المقاسات:
+            ${escapeHtml(factory.measurements || "")}
+
+            <br>
+
+            🎨 اللون:
+            ${escapeHtml(factory.color || "")}
+
+            <br>
+
+            🚪 الموديل:
+            ${escapeHtml(factory.model || "")}
+
+            <br>
+
+            🔧 الإكسسوارات:
+            ${escapeHtml(factory.accessories || "")}
+
+            <br>
+
+            📋 الحالة:
+            ${getFactoryStatus(factory.status)}
+
+            <br>
+
+            📝 ${escapeHtml(factory.notes || "")}
+
+        </div>
+
+        `;
+
+    });
+}
+
+
+/* التحديث الكامل */
+
+async function refreshAll(){
+
+    await loadDashboard();
+    await loadCustomers();
+    await loadCustomerOptions();
+    await loadOrders();
+    await loadOrderOptions();
+    await loadInvoices();
+    await loadPayments();
+    await loadFactory();
+
+    alert("تم تحديث البيانات");
+
+}
+
+
+/* حالات الطلبات */
+
+function getStatusText(status){
+
+    const statuses = {
+
+        new:"جديد",
+
+        processing:"قيد التنفيذ",
+
+        completed:"مكتمل",
+
+        cancelled:"ملغي"
+
+    };
+
+    return statuses[status] || status || "";
+
+}
+
+
+/* حالات الفواتير */
+
+function getInvoiceStatus(status){
+
+    const statuses = {
+
+        draft:"مسودة",
+
+        issued:"صادرة",
+
+        paid:"مدفوعة"
+
+    };
+
+    return statuses[status] || status || "";
+
+}
+
+
+/* حالات المصنع */
+
+function getFactoryStatus(status){
+
+    const statuses = {
+
+        new:"جديد",
+
+        production:"قيد التصنيع",
+
+        ready:"جاهز",
+
+        delivered:"تم التسليم"
+
+    };
+
+    return statuses[status] || status || "";
+
+}
+
+
+/* حماية عرض البيانات */
+
+function escapeHtml(value){
+
+    return String(value)
+
+    .replace(/&/g,"&amp;")
+
+    .replace(/</g,"&lt;")
+
+    .replace(/>/g,"&gt;")
+
+    .replace(/"/g,"&quot;")
+
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* تشغيل النظام */
+
+window.addEventListener("load",async()=>{
+
+    await loadDashboard();
+
+    await loadCustomers();
+
+    await loadCustomerOptions();
+
+    await loadOrders();
+
+    await loadOrderOptions();
+
+    await loadInvoices();
+
+    await loadPayments();
+
+    await loadFactory();
+
+});
 
 </script>
 
